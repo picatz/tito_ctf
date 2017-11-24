@@ -1,0 +1,26 @@
+#!/usr/bin/env ruby
+require 'tito_ctf'
+
+fail "No SLACK_API_TOKEN enviroment variable set!" unless ENV["SLACK_API_TOKEN"]
+
+challenges = {
+  "At least how many factors of authentication should you use?" => "2",
+  "What's the best programming language?" => "Ruby",
+  "What programming language sucks and is for snake people?" => "Python",
+  "base64 ZmxhZzoicHl0aG9uc3Vja3MiDQo=" => "pythonsucks",
+  "r13 synt:\"hfrIntenag\"" => "useVagrant",
+  "r25 ekzf:\"trdQtax\"" => "useRuby",
+  "==flaG:\"How can mirrors be real if our eyes aren't real?\"" => "How can mirrors be real if our eyes aren't real?"
+}
+
+challenges.each do |t, f|
+  Game.create_challenge(text: t, flag: f)
+end
+
+SlackRubyBot.configure do |config|
+  config.logger = Logger.new("slack-ruby-bot.log", "daily")
+end
+
+SlackRubyBot::Client.logger.level = Logger::WARN
+
+Bot.run 
